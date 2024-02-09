@@ -59,6 +59,7 @@ def get_cve_all():
         return jsonify({'error': 'CVE ID not found'}), 404
     
 
+
 @app.route('/cve', methods=['POST'])
 def add_cve():
     # Extract data from the request payload
@@ -108,6 +109,8 @@ def delete_cve(cve_id):
         conn.rollback()
         conn.close()
         return jsonify({'error': f'Failed to delete CVE record with ID {cve_id}: {str(e)}'}), 500
+
+
 
 @app.route('/cve/<cve_id>', methods=['PUT'])
 def modify_cve(cve_id):
