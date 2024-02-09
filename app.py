@@ -73,15 +73,27 @@ def add_cve():
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute('INSERT INTO cve_database (cve_id, severity, cvss, affected_packages, description, cwe_id) VALUES (%s, %s, %s, %s, %s, %s)',
+        cursor.execute('INSERT INTO cve_database (cve_id, severity, cvss, affected_packages, description, cwe_id) VALUES (%s, %s, %s, %s, %s, %s) RETURNING *',
                        (cve_data['cve_id'], cve_data['severity'], cve_data['cvss'], cve_data['affected_packages'], cve_data['description'], cve_data['cwe_id']))
+        inserted_record = cursor.fetchone()  # Fetch the inserted record
         conn.commit()
         conn.close()
-        return jsonify({'message': 'CVE record added successfully'}), 201
+        
+        # Construct the response with the inserted record
+        cve_dict = {
+            'cve_id': inserted_record[1],
+            'severity': inserted_record[2],
+            'cvss': inserted_record[3],
+            'affected_packages': inserted_record[4],
+            'description': inserted_record[5],
+            'cwe_id': inserted_record[6]
+        }
+        return jsonify({'message': 'CVE record added successfully', 'data': cve_dict}), 201
     except Exception as e:
         conn.rollback()
         conn.close()
         return jsonify({'error': f'Failed to add CVE record: {str(e)}'}), 500
+
     
 @app.route('/cve/<cve_id>', methods=['DELETE'])
 def delete_cve(cve_id):
@@ -96,6 +108,7 @@ def delete_cve(cve_id):
         conn.rollback()
         conn.close()
         return jsonify({'error': f'Failed to delete CVE record with ID {cve_id}: {str(e)}'}), 500
+
 @app.route('/cve/<cve_id>', methods=['PUT'])
 def modify_cve(cve_id):
     # Extract data from the request payload
@@ -110,15 +123,30 @@ def modify_cve(cve_id):
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
-        cursor.execute('UPDATE cve_database SET severity = %s, cvss = %s, affected_packages = %s, description = %s, cwe_id = %s WHERE cve_id = %s',
+        cursor.execute('UPDATE cve_database SET severity = %s, cvss = %s, affected_packages = %s, description = %s, cwe_id = %s WHERE cve_id = %s RETURNING *',
                        (cve_data['severity'], cve_data['cvss'], cve_data['affected_packages'], cve_data['description'], cve_data['cwe_id'], cve_id))
+        updated_one = cursor.fetchone()
         conn.commit()
         conn.close()
-        return jsonify({'message': f'CVE record with ID {cve_id} modified successfully'}), 200
+
+        if updated_one:
+            # Construct the response with the updated record
+            cve_dict = {
+                'cve_id': updated_one[1],
+                'severity': updated_one[2],
+                'cvss': updated_one[3],
+                'affected_packages': updated_one[4],
+                'description': updated_one[5],
+                'cwe_id': updated_one[6]
+            }
+            return jsonify({"cve_data": cve_dict, "message": f'CVE with ID {cve_id} updated successfully'}), 200
+        else:
+            return jsonify({'error': f'CVE record with ID {cve_id} not found'}), 404
     except Exception as e:
         conn.rollback()
         conn.close()
         return jsonify({'error': f'Failed to modify CVE record with ID {cve_id}: {str(e)}'}), 500
+
 
 
 if __name__ == '__main__':
