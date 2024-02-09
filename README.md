@@ -48,24 +48,24 @@ flask run
 ```
 2. Database Connection:
 
-Create a PostgreSQL database.
+    Create a PostgreSQL database.
 
-Obtain the database URL.
+    Obtain the database URL.
 
-Set up a .env file in the project directory and add the database URL:
+    Set up a .env file in the project directory and add the database URL:
 ```
 DATABASE_URL=<database_url>
 ```
-Configure the Flask app to read the database URL from the .env file using python-dotenv
+   Configure the Flask app to read the database URL from the .env file using python-dotenv
 
 3. Importing Data from CSV:
 
-Prepare your CSV file containing the CVE data.
-Place the CSV file in the project directory.
-Update the app.py file to read data from the CSV file, create the table, and insert data into the PostgreSQL database.
+   Prepare your CSV file containing the CVE data.
+   Place the CSV file in the project directory.
+   Update the app.py file to read data from the CSV file, create the table, and insert data into the PostgreSQL database.
 4. Executing the Main Function:
 
-Execute the app.py script to import data from the CSV file into the PostgreSQL database:
+   Execute the app.py script to import data from the CSV file into the PostgreSQL database:
 ```
 python app.py
 ```
