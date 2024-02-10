@@ -23,10 +23,13 @@ def insert_data(cursor, data):
 
 # Function to read data from CSV
 def read_csv(file_path):
+    data = []
     with open(file_path, newline='') as csvfile:
         reader = csv.reader(csvfile)
-        next(reader)  # Skip header
-        return [tuple(row) for row in reader]
+        next(reader)  # Skip header row
+        for row in reader:
+            data.append(tuple(row))
+    return data
 
 
 # Main function

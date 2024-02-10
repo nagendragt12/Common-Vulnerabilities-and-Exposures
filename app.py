@@ -3,7 +3,6 @@ import psycopg2
 from psycopg2 import sql
 
 app = Flask(__name__)
-#postgres://jfvzwkju:BzUzsrjF212Xqzl7NjPs-1E9axG7OqUv@rain.db.elephantsql.com/jfvzwkju
 # Database connection configuration
 DATABASE = 'postgres://jfvzwkju:BzUzsrjF212Xqzl7NjPs-1E9axG7OqUv@rain.db.elephantsql.com/jfvzwkju'  # PostgreSQL database connection string
 
@@ -35,7 +34,7 @@ def get_cve(cve_id):
         return jsonify({'error': 'CVE ID not found'}), 4044
     
 
-@app.route('/cve', methods=['GET'])
+@app.route('/cve/all', methods=['GET'])
 def get_cve_all():
     conn = get_db_connection()
     cursor = conn.cursor()
