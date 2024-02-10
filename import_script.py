@@ -35,7 +35,7 @@ def read_csv(file_path):
 # Main function
 def main():
     # Define your CSV file path
-    csv_file = 'C:\\Users\\jeeva\\Downloads\\CVE_DATABASE.csv'
+    csv_file = 'C:\\Users\\naga\\Downloads\\CVE_DATABASE.csv'
 
     # Connect to PostgreSQL database
     conn = psycopg2.connect("postgres://jfvzwkju:BzUzsrjF212Xqzl7NjPs-1E9axG7OqUv@rain.db.elephantsql.com/jfvzwkju")
